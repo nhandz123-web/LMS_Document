@@ -50,13 +50,24 @@ Route::get('/drive/callback', function (\Illuminate\Http\Request $request) {
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
     Route::get('/', fn() => redirect()->route('admin.dashboard'));
+
+    Route::get('/documents', [App\Http\Controllers\Admin\DocumentManagementController::class, 'index'])->name('documents.index');
+    Route::post('/documents/{id}/approve', [App\Http\Controllers\Admin\DocumentManagementController::class, 'approve'])->name('documents.approve');
+    Route::post('/documents/{id}/reject', [App\Http\Controllers\Admin\DocumentManagementController::class, 'reject'])->name('documents.reject');
+    Route::delete('/documents/{id}', [App\Http\Controllers\Admin\DocumentManagementController::class, 'destroy'])->name('documents.destroy');
+
+    // Route Quản lý User
+    Route::get('/users', [App\Http\Controllers\Admin\UserManagementController::class, 'index'])->name('users.index');
+    Route::post('/users/{id}/role', [App\Http\Controllers\Admin\UserManagementController::class, 'updateRole'])->name('users.role');
+    Route::post('/users/{id}/status', [App\Http\Controllers\Admin\UserManagementController::class, 'toggleStatus'])->name('users.status');
+    Route::delete('/users/{id}', [App\Http\Controllers\Admin\UserManagementController::class, 'destroy'])->name('users.destroy');
 });
 
 // =================== App (cần đăng nhập) ===================
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-
     // Dùng resource để có đủ tên route, bao gồm documents.destroy
-    Route::resource('documents', DocumentController::class)
-        ->only(['index', 'create', 'store', 'destroy']);
+    // Route::resource('documents', DocumentController::class)
+    //     ->only(['index', 'create', 'store', 'destroy']);
 });
+

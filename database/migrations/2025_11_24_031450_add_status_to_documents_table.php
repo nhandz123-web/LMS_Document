@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up()
+    {
+        Schema::table('documents', function (Blueprint $table) {
+            // Thêm cột status, mặc định là 'active' (hoặc 'pending')
+            // Đặt sau cột id hoặc cột nào đó tùy bạn
+            $table->string('status')->default('pending')->after('id');
+        });
+    }
+
+    public function down()
+    {
+        Schema::table('documents', function (Blueprint $table) {
+            $table->dropColumn('status');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+};

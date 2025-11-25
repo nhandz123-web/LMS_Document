@@ -24,7 +24,6 @@ class DriveController extends Controller
         ]);
 
         $file = $request->file('file');
-
         // tên sạch + giữ phần mở rộng
         $base = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $ext  = $file->getClientOriginalExtension();
