@@ -6,47 +6,31 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold text-primary"><i class="fas fa-folder-open me-2"></i>Quản lý văn bản</h3>
+        <a href="{{ route('admin.documents.create') }}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus-circle me-2"></i>Thêm văn bản mới
+        </a>
     </div>
 
-    {{-- Thông báo --}}
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
     @endif
 
     <div class="card shadow-sm">
-        {{-- Header & Bộ lọc --}}
-        <div class="card-header bg-white py-3">
-            <ul class="nav nav-pills card-header-pills">
-                <li class="nav-item">
-                    <a class="nav-link {{ request('status') == 'all' || !request('status') ? 'active' : '' }}" 
-                       href="{{ route('admin.documents.index', ['status' => 'all']) }}">Tất cả</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request('status') == 'pending' ? 'active' : '' }}" 
-                       href="{{ route('admin.documents.index', ['status' => 'pending']) }}">
-                       Chờ duyệt <span class="badge bg-danger ms-1">{{ \App\Models\Document::where('status', 'pending')->count() }}</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request('status') == 'approved' ? 'active' : '' }}" 
-                       href="{{ route('admin.documents.index', ['status' => 'approved']) }}">Đã duyệt</a>
-                </li>
-            </ul>
-        </div>
+        {{-- ĐÃ XÓA: Phần Header chứa các Tab (Pending/Approved...) --}}
 
         <div class="card-body p-0">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
                         <th width="5%">ID</th>
-                        <th width="30%">Văn bản</th>
-                        <th width="15%">Người đăng</th>
-                        <th width="15%">Trạng thái</th>
+                        <th width="40%">Văn bản</th> {{-- Tăng độ rộng --}}
+                        <th width="20%">Người đăng</th>
+                        {{-- ĐÃ XÓA: Cột Trạng thái --}}
                         <th width="15%">Ngày tạo</th>
-                        <th width="20%" class="text-end">Hành động</th>
+                        <th width="10%" class="text-end">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,9 +40,6 @@
                         <td>
                             <div class="fw-bold text-dark">{{ $doc->title }}</div>
                             <small class="text-muted"><i class="fas fa-file-alt me-1"></i>{{ strtoupper($doc->type) }}</small>
-                            @if($doc->status === 'rejected' && $doc->rejected_reason)
-                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle"></i> Lý do: {{ $doc->rejected_reason }}</div>
-                            @endif
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
@@ -71,16 +52,10 @@
                                 </div>
                             </div>
                         </td>
-                        <td>
-                            @if($doc->status === 'pending')
-                                <span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i>Chờ duyệt</span>
-                            @elseif($doc->status === 'approved')
-                                <span class="badge bg-success"><i class="fas fa-check me-1"></i>Đã duyệt</span>
-                            @elseif($doc->status === 'rejected')
-                                <span class="badge bg-danger"><i class="fas fa-times me-1"></i>Bị từ chối</span>
-                            @endif
-                        </td>
+                        {{-- ĐÃ XÓA: Cột hiển thị Badge Pending/Approved --}}
+
                         <td>{{ $doc->created_at->format('d/m/Y H:i') }}</td>
+
                         <td class="text-end">
                             <div class="btn-group">
                                 {{-- Nút Xem --}}
@@ -90,23 +65,9 @@
                                 </a>
                                 @endif
 
-                                {{-- Chỉ hiện nút Duyệt/Từ chối nếu đang Pending --}}
-                                @if($doc->status === 'pending')
-                                    <form action="{{ route('admin.documents.approve', $doc->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-outline-success" onclick="return confirm('Duyệt văn bản này?')" title="Duyệt">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                    </form>
-                                    
-                                    {{-- Nút gọi Modal Từ chối --}}
-                                    <button type="button" class="btn btn-sm btn-outline-warning" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#rejectModal" 
-                                            onclick="setRejectId({{ $doc->id }})" title="Từ chối">
-                                        <i class="fas fa-ban"></i>
-                                    </button>
-                                @endif
+                                <a href="{{ route('admin.documents.edit', $doc->id) }}" class="btn btn-sm btn-outline-info" title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
 
                                 {{-- Nút Xóa --}}
                                 <form action="{{ route('admin.documents.destroy', $doc->id) }}" method="POST" class="d-inline">
@@ -120,7 +81,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">
+                        <td colspan="5" class="text-center py-5 text-muted"> {{-- Sửa colspan thành 5 --}}
                             <i class="fas fa-inbox fa-3x mb-3 opacity-50"></i>
                             <p>Không tìm thấy văn bản nào.</p>
                         </td>
@@ -129,11 +90,9 @@
                 </tbody>
             </table>
         </div>
-        
-        {{-- Phân trang --}}
+
         <div class="card-footer bg-white">
-            {{ $docs->links() }} 
-            {{-- Lưu ý: Nếu dùng Bootstrap 5, cần vào AppServiceProvider::boot() thêm Paginator::useBootstrapFive(); --}}
+            {{ $docs->links() }}
         </div>
     </div>
 </div>

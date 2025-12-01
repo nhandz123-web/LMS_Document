@@ -52,6 +52,25 @@ class GoogleDriveService
         ]);
     }
 
+    public function rename($fileId, $newName)
+    {
+        try {
+            $service = $this->service();
+            // Tạo metadata mới chứa tên mới
+            $fileMetadata = new DriveFile([
+                'name' => $newName
+            ]);
+
+            // Gọi API update
+            return $service->files->update($fileId, $fileMetadata, [
+                'fields' => 'id, name'
+            ]);
+        } catch (\Exception $e) {
+            // Log lỗi nếu cần
+            return false;
+        }
+    }
+
     // Xoá file
     public function delete($fileId)
     {

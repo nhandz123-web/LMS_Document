@@ -51,12 +51,23 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
     Route::get('/', fn() => redirect()->route('admin.dashboard'));
 
+    // --- QUẢN LÝ VĂN BẢN (Đã thêm Create và Store) ---
     Route::get('/documents', [App\Http\Controllers\Admin\DocumentManagementController::class, 'index'])->name('documents.index');
-    Route::post('/documents/{id}/approve', [App\Http\Controllers\Admin\DocumentManagementController::class, 'approve'])->name('documents.approve');
-    Route::post('/documents/{id}/reject', [App\Http\Controllers\Admin\DocumentManagementController::class, 'reject'])->name('documents.reject');
+    
+    // 1. Route hiển thị form upload
+    Route::get('/documents/create', [App\Http\Controllers\Admin\DocumentManagementController::class, 'create'])->name('documents.create');
+    
+    // 2. Route xử lý lưu data khi submit form
+    Route::post('/documents', [App\Http\Controllers\Admin\DocumentManagementController::class, 'store'])->name('documents.store');
+
+    // Route::post('/documents/{id}/approve', [App\Http\Controllers\Admin\DocumentManagementController::class, 'approve'])->name('documents.approve');
+    // Route::post('/documents/{id}/reject', [App\Http\Controllers\Admin\DocumentManagementController::class, 'reject'])->name('documents.reject');
+
+    Route::put('/documents/{id}', [App\Http\Controllers\Admin\DocumentManagementController::class, 'update'])->name('documents.update');
+    Route::get('/documents/{id}/edit', [App\Http\Controllers\Admin\DocumentManagementController::class, 'edit'])->name('documents.edit');
     Route::delete('/documents/{id}', [App\Http\Controllers\Admin\DocumentManagementController::class, 'destroy'])->name('documents.destroy');
 
-    // Route Quản lý User
+    // Route Quản lý User (Giữ nguyên)
     Route::get('/users', [App\Http\Controllers\Admin\UserManagementController::class, 'index'])->name('users.index');
     Route::post('/users/{id}/role', [App\Http\Controllers\Admin\UserManagementController::class, 'updateRole'])->name('users.role');
     Route::post('/users/{id}/status', [App\Http\Controllers\Admin\UserManagementController::class, 'toggleStatus'])->name('users.status');
@@ -67,7 +78,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     // Dùng resource để có đủ tên route, bao gồm documents.destroy
-    // Route::resource('documents', DocumentController::class)
-    //     ->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('documents', DocumentController::class)
+        ->only(['index', 'create', 'store', 'destroy']);
 });
 
