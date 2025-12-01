@@ -9,17 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void {
-    Schema::create('users', function (Blueprint $table) {
-        $table->id();
-        $table->string('fullname');
-        $table->string('email')->unique();
-        $table->string('password'); // hash
-        $table->enum('role', ['SV','GV','ADMIN'])->default('SV'); // theo SRS
-        // $table->string('role',20)->default('SV');
-        $table->timestamps();
-    });
-}
+    public function up(): void
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('fullname');
+            $table->string('email')->unique();
+            $table->string('password'); // hash
+            $table->enum('role', ['SV', 'GV', 'ADMIN'])->default('SV'); // theo SRS
+            // $table->string('role',20)->default('SV');
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.

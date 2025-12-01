@@ -19,7 +19,7 @@ class PromoteUser extends Command
         $email = $this->argument('email');
         $role  = strtoupper($this->argument('role'));
 
-        if (!in_array($role, ['SV','GV','ADMIN'], true)) {
+        if (!in_array($role, ['SV', 'GV', 'ADMIN'], true)) {
             $this->error('Role phải là SV | GV | ADMIN');
             return self::FAILURE;
         }

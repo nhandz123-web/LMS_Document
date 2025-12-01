@@ -53,10 +53,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 
     // --- QUẢN LÝ VĂN BẢN (Đã thêm Create và Store) ---
     Route::get('/documents', [App\Http\Controllers\Admin\DocumentManagementController::class, 'index'])->name('documents.index');
-    
+
     // 1. Route hiển thị form upload
     Route::get('/documents/create', [App\Http\Controllers\Admin\DocumentManagementController::class, 'create'])->name('documents.create');
-    
+
     // 2. Route xử lý lưu data khi submit form
     Route::post('/documents', [App\Http\Controllers\Admin\DocumentManagementController::class, 'store'])->name('documents.store');
 
@@ -81,4 +81,3 @@ Route::middleware('auth')->group(function () {
     Route::resource('documents', DocumentController::class)
         ->only(['index', 'create', 'store', 'destroy']);
 });
-
