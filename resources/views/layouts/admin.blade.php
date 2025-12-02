@@ -4,113 +4,625 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Dashboard') - Quản lý văn bản</title>
+    <title>@yield('title', 'Admin Dashboard') - Hệ thống quản lý</title>
+    
+    {{-- Fonts --}}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    {{-- Bootstrap & Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body {
-            background-color: #f8f9fa;
+        /* ============================================
+           GLOBAL STYLES
+        ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8f9fc;
+            color: #2d3748;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           SIDEBAR DESIGN
+        ============================================ */
         .sidebar {
             min-height: 100vh;
-            background: #343a40;
-            color: white;
+            width: 280px;
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .sidebar a {
-            color: #adb5bd;
+        .sidebar-brand {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
-            padding: 10px 15px;
-            display: block;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: #495057;
+        .sidebar-brand::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .sidebar-brand:hover::before {
+            left: 100%;
+        }
+
+        .sidebar-brand .brand-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .sidebar-menu {
+            padding: 20px 15px;
+            list-style: none;
+        }
+
+        .menu-section {
+            margin-bottom: 30px;
+        }
+
+        .menu-section-title {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 15px;
+            margin-bottom: 12px;
+        }
+
+        .nav-item {
+            margin-bottom: 4px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #4e73df;
+            background: #f3f4f6;
+            transform: translateX(5px);
+        }
+
+        .nav-link:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+        }
+
+        .nav-link.active::before {
+            display: none;
+        }
+
+        .nav-link i {
+            width: 24px;
+            margin-right: 12px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            padding: 2px 8px;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 10px;
+        }
+
+        /* ============================================
+           MAIN CONTENT AREA
+        ============================================ */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ============================================
+           TOPBAR / NAVBAR
+        ============================================ */
+        .topbar {
+            height: 80px;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .topbar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .topbar-search {
+            position: relative;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .topbar-search input {
+            width: 100%;
+            padding: 10px 15px 10px 45px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .topbar-search input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .topbar-search i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .topbar-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: #f3f4f6;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .topbar-btn:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .topbar-btn .badge-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .user-menu:hover {
+            background: #f3f4f6;
+            border-color: #e5e7eb;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
-        .card-icon {
-            font-size: 2rem;
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+            border-radius: 12px;
+            padding: 8px;
+            min-width: 220px;
+            margin-top: 10px !important;
+        }
+
+        .dropdown-item {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: #f3f4f6;
+            transform: translateX(5px);
+        }
+
+        .dropdown-item i {
+            width: 20px;
+            margin-right: 10px;
+            text-align: center;
+        }
+
+        .dropdown-divider {
+            margin: 8px 0;
             opacity: 0.5;
+        }
+
+        /* ============================================
+           CONTENT BODY
+        ============================================ */
+        .content-body {
+            flex: 1;
+            padding: 30px;
+        }
+
+        /* ============================================
+           FOOTER
+        ============================================ */
+        .footer {
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+            padding: 20px 30px;
+            margin-top: auto;
+        }
+
+        .footer-text {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* ============================================
+           RESPONSIVE
+        ============================================ */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .topbar-title {
+                font-size: 1.2rem;
+            }
+
+            .topbar-search {
+                display: none;
+            }
+
+            .user-info {
+                display: none;
+            }
+        }
+
+        /* ============================================
+           ANIMATIONS
+        ============================================ */
+        @keyframes slideInFromLeft {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-item {
+            animation: slideInFromLeft 0.3s ease forwards;
+        }
+
+        .nav-item:nth-child(1) { animation-delay: 0.1s; }
+        .nav-item:nth-child(2) { animation-delay: 0.15s; }
+        .nav-item:nth-child(3) { animation-delay: 0.2s; }
+        .nav-item:nth-child(4) { animation-delay: 0.25s; }
+        .nav-item:nth-child(5) { animation-delay: 0.3s; }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
 </head>
 
 <body>
-
-    <div class="d-flex">
-        <div class="sidebar p-3 d-none d-md-block flex-shrink-0" style="width: 250px;">
-            <h4 class="text-white text-center mb-4">HỆ THỐNG VB</h4>
-            <hr>
-            <ul class="list-unstyled">
-                <li>
-                    <a href="{{ url('/admin/dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
-                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-                    </a>
-                </li>
-
-                {{-- MỤC QUẢN LÝ VĂN BẢN --}}
-                <li>
-                    <a href="{{ route('admin.documents.index') }}"
-                        class="{{ request()->routeIs('admin.documents.*') ? 'active' : '' }}">
-                        <i class="fas fa-file-alt me-2"></i> Quản lý Văn bản
-                    </a>
-                </li>
-
-                {{-- [MỚI] THÊM MỤC QUẢN LÝ DANH MỤC VÀO ĐÂY --}}
-                <li>
-                    <a href="{{ route('admin.categories.index') }}"
-                        class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-                        <i class="fas fa-list-ul me-2"></i> Quản lý Danh mục
-                    </a>
-                </li>
-
-                {{-- MỤC QUẢN LÝ USER --}}
-                <li>
-                    {{-- Tôi cập nhật thêm class active cho User luôn để đồng bộ --}}
-                    <a href="{{ route('admin.users.index') }}"
-                        class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                        <i class="fas fa-users me-2"></i> Quản lý User
-                    </a>
-                </li>
-
-                <li><a href="#"><i class="fas fa-cogs me-2"></i> Cài đặt hệ thống</a></li>
-            </ul>
-        </div>
-
-        <div class="flex-grow-1">
-            <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
-                <div class="d-flex justify-content-between w-100 align-items-center">
-                    <span class="fw-bold">Trang quản trị</span>
-                    <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
-                            Xin chào, {{ Auth::user()->fullname ?? 'Admin' }}
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item text-danger">Đăng xuất</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-
-            <div class="p-4">
-                @yield('content')
+    {{-- SIDEBAR --}}
+    <aside class="sidebar">
+        <a href="{{ route('admin.dashboard') }}" class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="fas fa-rocket"></i>
             </div>
+            <span>AdminHub</span>
+        </a>
+
+        <ul class="sidebar-menu">
+            <li class="menu-section">
+                <div class="menu-section-title">Tổng quan</div>
+                <ul class="list-unstyled">
+                    <li class="nav-item">
+                        <a href="{{ url('/admin/dashboard') }}" 
+                           class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="menu-section">
+                <div class="menu-section-title">Quản lý nội dung</div>
+                <ul class="list-unstyled">
+                    <li class="nav-item">
+                        <a href="{{ route('admin.documents.index') }}"
+                           class="nav-link {{ request()->routeIs('admin.documents.*') ? 'active' : '' }}">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Văn bản</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.categories.index') }}"
+                           class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                            <i class="fas fa-folder-open"></i>
+                            <span>Danh mục</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="menu-section">
+                <div class="menu-section-title">Người dùng</div>
+                <ul class="list-unstyled">
+                    <li class="nav-item">
+                        <a href="{{ route('admin.users.index') }}"
+                           class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                            <i class="fas fa-users"></i>
+                            <span>Thành viên</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="menu-section">
+                <div class="menu-section-title">Hệ thống</div>
+                <ul class="list-unstyled">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Cài đặt</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    {{-- MAIN CONTENT --}}
+    <div class="main-content">
+        {{-- TOPBAR --}}
+        <nav class="topbar">
+            <div class="topbar-left">
+                <h1 class="topbar-title">Hệ thống Quản lý Tài liệu</h1>
+            </div>
+
+            <div class="topbar-search d-none d-lg-block">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Tìm kiếm văn bản, thành viên...">
+            </div>
+
+            <div class="topbar-actions">
+                <button class="topbar-btn" title="Thông báo">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge-dot"></span>
+                </button>
+
+                <button class="topbar-btn d-none d-md-flex" title="Tin nhắn">
+                    <i class="fas fa-envelope"></i>
+                </button>
+
+                {{-- User Dropdown --}}
+                <div class="dropdown">
+                    <div class="user-menu" data-bs-toggle="dropdown">
+                        <div class="user-avatar">
+                            {{ strtoupper(substr(Auth::user()->fullname ?? 'A', 0, 1)) }}
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ Auth::user()->fullname ?? 'Administrator' }}</div>
+                            <div class="user-role">{{ Auth::user()->role ?? 'Admin' }}</div>
+                        </div>
+                        <i class="fas fa-chevron-down" style="color: #9ca3af; font-size: 0.75rem;"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user"></i>
+                                Hồ sơ cá nhân
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cog"></i>
+                                Cài đặt
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Đăng xuất
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {{-- CONTENT BODY --}}
+        <div class="content-body">
+            @yield('content')
         </div>
+
+        {{-- FOOTER --}}
+        <footer class="footer">
+            <p class="footer-text">
+                © {{ date('Y') }} Hệ thống Quản lý Văn bản. Phát triển bởi <strong>Admin Team</strong>
+            </p>
+        </footer>
     </div>
 
+    {{-- Scripts --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mobile sidebar toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggleTop');
+            
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('show');
+                });
+            }
+        });
+    </script>
 </body>
-
 </html>

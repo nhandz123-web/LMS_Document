@@ -3,163 +3,324 @@
 @section('title', 'Bảng điều khiển')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold text-dark"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Dashboard</h3>
-        <span class="text-muted">Hôm nay: {{ date('d/m/Y') }}</span>
+<div class="container-fluid px-4">
+    {{-- Header Section --}}
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <h2 class="fw-bold text-dark mb-1">
+                <i class="fas fa-tachometer-alt me-2" style="color: #4e73df;"></i>Dashboard
+            </h2>
+            <p class="text-muted mb-0">Chào mừng trở lại! Đây là tổng quan hệ thống của bạn</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <div class="d-inline-block bg-light rounded-3 px-3 py-2">
+                <i class="fas fa-calendar-day me-2 text-primary"></i>
+                <span class="fw-semibold">{{ date('d/m/Y') }}</span>
+            </div>
+        </div>
     </div>
 
-    {{-- 1. CÁC THẺ THỐNG KÊ (CARDS) --}}
-    <div class="row mb-4">
+    {{-- Statistics Cards --}}
+    <div class="row g-4 mb-4">
         {{-- Card: Tổng văn bản --}}
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-primary border-4 shadow h-100 py-2">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm hover-lift h-100">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">Tổng Văn bản</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">{{ $stats['documents'] }}</div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="flex-grow-1">
+                            <p class="text-muted text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 0.5px; font-weight: 600;">Tổng Văn bản</p>
+                            <h3 class="fw-bold mb-0" style="color: #4e73df;">{{ $stats['documents'] }}</h3>
                         </div>
-                        <div class="col-auto"><i class="fas fa-file-alt fa-2x text-gray-300 opacity-50"></i></div>
+                        <div class="icon-box" style="width: 50px; height: 50px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-file-alt fa-lg text-white"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar" style="width: 75%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Card: Tổng thành viên --}}
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-success border-4 shadow h-100 py-2">
+        {{-- Card: Thành viên --}}
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm hover-lift h-100">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs fw-bold text-success text-uppercase mb-1">Thành viên</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">{{ $stats['users'] }}</div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="flex-grow-1">
+                            <p class="text-muted text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 0.5px; font-weight: 600;">Thành viên</p>
+                            <h3 class="fw-bold mb-0" style="color: #1cc88a;">{{ $stats['users'] }}</h3>
                         </div>
-                        <div class="col-auto"><i class="fas fa-users fa-2x text-gray-300 opacity-50"></i></div>
+                        <div class="icon-box" style="width: 50px; height: 50px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-users fa-lg text-white"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-success" style="width: 60%; background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%) !important;"></div>
                     </div>
                 </div>
             </div>
         </div>
 
         {{-- Card: Danh mục --}}
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-info border-4 shadow h-100 py-2">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm hover-lift h-100">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs fw-bold text-info text-uppercase mb-1">Danh mục</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">{{ $stats['categories'] }}</div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="flex-grow-1">
+                            <p class="text-muted text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 0.5px; font-weight: 600;">Danh mục</p>
+                            <h3 class="fw-bold mb-0" style="color: #36b9cc;">{{ $stats['categories'] }}</h3>
                         </div>
-                        <div class="col-auto"><i class="fas fa-folder fa-2x text-gray-300 opacity-50"></i></div>
+                        <div class="icon-box" style="width: 50px; height: 50px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-folder fa-lg text-white"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar" style="width: 85%; background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);"></div>
                     </div>
                 </div>
             </div>
         </div>
 
         {{-- Card: Admin --}}
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-warning border-4 shadow h-100 py-2">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm hover-lift h-100">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">Quản trị viên</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">{{ $stats['admins'] }}</div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="flex-grow-1">
+                            <p class="text-muted text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 0.5px; font-weight: 600;">Quản trị viên</p>
+                            <h3 class="fw-bold mb-0" style="color: #f6c23e;">{{ $stats['admins'] }}</h3>
                         </div>
-                        <div class="col-auto"><i class="fas fa-user-shield fa-2x text-gray-300 opacity-50"></i></div>
+                        <div class="icon-box" style="width: 50px; height: 50px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-shield fa-lg text-white"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar" style="width: 50%; background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- 2. HÀNG DƯỚI: BIỂU ĐỒ + BẢNG MỚI NHẤT --}}
-    <div class="row">
-        {{-- Cột Trái: Biểu đồ (Chiếm 8 phần) --}}
-        <div class="col-lg-8 mb-4">
-            <div class="card shadow mb-4 h-100">
-                <div class="card-header py-3 bg-white">
-                    <h6 class="m-0 fw-bold text-primary"><i class="fas fa-chart-bar me-2"></i>Thống kê tải lên năm {{ date('Y') }}</h6>
+    {{-- Chart and Recent Documents --}}
+    <div class="row g-4">
+        {{-- Chart Section --}}
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1 fw-bold" style="color: #4e73df;">
+                                <i class="fas fa-chart-line me-2"></i>Thống kê tải lên
+                            </h5>
+                            <p class="text-muted mb-0 small">Biểu đồ văn bản theo tháng năm {{ date('Y') }}</p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Xuất dữ liệu</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-print me-2"></i>In báo cáo</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="chart-area" style="position: relative; height: 300px;">
+                    <div class="chart-area" style="position: relative; height: 320px;">
                         <canvas id="myAreaChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Cột Phải: 5 Văn bản mới nhất (Chiếm 4 phần) --}}
-        <div class="col-lg-4 mb-4">
-            <div class="card shadow mb-4 h-100">
-                <div class="card-header py-3 bg-white d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 fw-bold text-primary"><i class="fas fa-clock me-2"></i>Vừa cập nhật</h6>
-                    <a href="{{ route('admin.documents.index') }}" class="small text-decoration-none">Xem tất cả &rarr;</a>
+        {{-- Recent Documents --}}
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1 fw-bold" style="color: #4e73df;">
+                                <i class="fas fa-clock me-2"></i>Vừa cập nhật
+                            </h5>
+                            <p class="text-muted mb-0 small">5 văn bản mới nhất</p>
+                        </div>
+                        <a href="{{ route('admin.documents.index') }}" class="btn btn-sm btn-outline-primary">
+                            Xem tất cả
+                        </a>
+                    </div>
                 </div>
-                <div class="card-body p-0">
-                    <ul class="list-group list-group-flush">
-                        @forelse($recentDocuments as $doc)
-                        <li class="list-group-item d-flex align-items-center p-3">
+                <div class="card-body p-0" style="max-height: 400px; overflow-y: auto;">
+                    @forelse($recentDocuments as $index => $doc)
+                    <div class="document-item p-3 border-bottom" style="transition: all 0.3s ease;">
+                        <div class="d-flex align-items-start">
                             <div class="me-3">
-                                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                    @if($doc->type == 'PDF') <i class="fas fa-file-pdf text-danger"></i>
-                                    @elseif($doc->type == 'DOCX') <i class="fas fa-file-word text-primary"></i>
-                                    @else <i class="fas fa-file text-secondary"></i>
+                                <div class="file-icon-wrapper d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 10px; 
+                                    @if($doc->type == 'PDF') background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+                                    @elseif($doc->type == 'DOCX') background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+                                    @else background: linear-gradient(135deg, #858796 0%, #60616f 100%);
+                                    @endif">
+                                    @if($doc->type == 'PDF') 
+                                        <i class="fas fa-file-pdf text-white"></i>
+                                    @elseif($doc->type == 'DOCX') 
+                                        <i class="fas fa-file-word text-white"></i>
+                                    @else 
+                                        <i class="fas fa-file text-white"></i>
                                     @endif
                                 </div>
                             </div>
                             <div class="flex-grow-1 overflow-hidden">
-                                <h6 class="mb-0 text-truncate" title="{{ $doc->title }}">{{ $doc->title }}</h6>
-                                <small class="text-muted">
-                                    {{ $doc->author->fullname ?? 'Unknown' }} • {{ $doc->created_at->diffForHumans() }}
-                                </small>
+                                <h6 class="mb-1 text-truncate fw-semibold" style="color: #2d3748;" title="{{ $doc->title }}">
+                                    {{ $doc->title }}
+                                </h6>
+                                <div class="d-flex align-items-center text-muted small">
+                                    <i class="fas fa-user-circle me-1"></i>
+                                    <span class="me-2">{{ $doc->author->fullname ?? 'Unknown' }}</span>
+                                    <i class="fas fa-clock me-1"></i>
+                                    <span>{{ $doc->created_at->diffForHumans() }}</span>
+                                </div>
                             </div>
-                        </li>
-                        @empty
-                        <li class="list-group-item text-center py-4 text-muted">Chưa có văn bản nào.</li>
-                        @endforelse
-                    </ul>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="text-center py-5">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted mb-0">Chưa có văn bản nào</p>
+                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-{{-- SCRIPT VẼ BIỂU ĐỒ --}}
+{{-- Custom CSS --}}
+<style>
+    .hover-lift {
+        transition: all 0.3s ease;
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .document-item:hover {
+        background-color: #f8f9fc;
+        cursor: pointer;
+    }
+
+    .document-item:last-child {
+        border-bottom: none !important;
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .icon-box {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+        transition: width 1s ease;
+    }
+
+    /* Custom scrollbar */
+    .card-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .card-body::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .card-body::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+
+    .card-body::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+
+{{-- Chart Script --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const chartData = @json($chartData); 
     const ctx = document.getElementById('myAreaChart').getContext('2d');
     
-    // Gradient màu cho đẹp
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(78, 115, 223, 0.5)');
-    gradient.addColorStop(1, 'rgba(78, 115, 223, 0.05)');
+    // Gradient cho đường biểu đồ
+    const gradientFill = ctx.createLinearGradient(0, 0, 0, 300);
+    gradientFill.addColorStop(0, 'rgba(78, 115, 223, 0.2)');
+    gradientFill.addColorStop(1, 'rgba(78, 115, 223, 0.0)');
 
     new Chart(ctx, {
-        type: 'line', // Đổi sang 'line' cho mềm mại (hoặc 'bar' nếu thích cột)
+        type: 'line',
         data: {
-            labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+            labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
             datasets: [{
                 label: 'Văn bản mới',
                 data: chartData,
-                backgroundColor: gradient,
+                backgroundColor: gradientFill,
                 borderColor: '#4e73df',
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#fff',
                 pointBorderColor: '#4e73df',
-                pointRadius: 4,
-                pointHoverRadius: 6,
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointHoverBackgroundColor: '#4e73df',
+                pointHoverBorderColor: '#fff',
+                pointHoverBorderWidth: 2,
                 fill: true,
-                tension: 0.3 // Làm cong đường biểu đồ
+                tension: 0.4
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } }, // Ẩn chú thích cho gọn
+            plugins: { 
+                legend: { 
+                    display: false 
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 },
+                    cornerRadius: 8,
+                    displayColors: false
+                }
+            },
             scales: {
-                y: { beginAtZero: true, ticks: { stepSize: 1 } },
-                x: { grid: { display: false } }
+                y: { 
+                    beginAtZero: true, 
+                    ticks: { 
+                        stepSize: 1,
+                        font: { size: 11 },
+                        color: '#858796'
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                        drawBorder: false
+                    }
+                },
+                x: { 
+                    grid: { 
+                        display: false 
+                    },
+                    ticks: {
+                        font: { size: 11 },
+                        color: '#858796'
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
             }
         }
     });
