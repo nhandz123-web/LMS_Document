@@ -63,6 +63,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     // Route::post('/documents/{id}/approve', [App\Http\Controllers\Admin\DocumentManagementController::class, 'approve'])->name('documents.approve');
     // Route::post('/documents/{id}/reject', [App\Http\Controllers\Admin\DocumentManagementController::class, 'reject'])->name('documents.reject');
 
+    // Quản lý Danh mục
+    Route::resource('categories', App\Http\Controllers\Admin\CategoryManagementController::class)->except(['create', 'show', 'edit']);
+    // (Mình dùng resource nhưng bỏ create/edit vì sẽ làm Modal popup cho nhanh, không cần chuyển trang)
+
     Route::put('/documents/{id}', [App\Http\Controllers\Admin\DocumentManagementController::class, 'update'])->name('documents.update');
     Route::get('/documents/{id}/edit', [App\Http\Controllers\Admin\DocumentManagementController::class, 'edit'])->name('documents.edit');
     Route::delete('/documents/{id}', [App\Http\Controllers\Admin\DocumentManagementController::class, 'destroy'])->name('documents.destroy');

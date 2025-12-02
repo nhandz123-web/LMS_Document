@@ -45,14 +45,37 @@
             <h4 class="text-white text-center mb-4">HỆ THỐNG VB</h4>
             <hr>
             <ul class="list-unstyled">
-                <li><a href="{{ url('/admin/dashboard') }}" class="active"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a></li>
+                <li>
+                    <a href="{{ url('/admin/dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                </li>
+
+                {{-- MỤC QUẢN LÝ VĂN BẢN --}}
                 <li>
                     <a href="{{ route('admin.documents.index') }}"
                         class="{{ request()->routeIs('admin.documents.*') ? 'active' : '' }}">
                         <i class="fas fa-file-alt me-2"></i> Quản lý Văn bản
                     </a>
                 </li>
-                <li><a href="{{ url('/admin/users') }}"><i class="fas fa-users me-2"></i> Quản lý User</a></li>
+
+                {{-- [MỚI] THÊM MỤC QUẢN LÝ DANH MỤC VÀO ĐÂY --}}
+                <li>
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                        <i class="fas fa-list-ul me-2"></i> Quản lý Danh mục
+                    </a>
+                </li>
+
+                {{-- MỤC QUẢN LÝ USER --}}
+                <li>
+                    {{-- Tôi cập nhật thêm class active cho User luôn để đồng bộ --}}
+                    <a href="{{ route('admin.users.index') }}"
+                        class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                        <i class="fas fa-users me-2"></i> Quản lý User
+                    </a>
+                </li>
+
                 <li><a href="#"><i class="fas fa-cogs me-2"></i> Cài đặt hệ thống</a></li>
             </ul>
         </div>

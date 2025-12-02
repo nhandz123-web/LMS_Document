@@ -23,9 +23,30 @@
                         {{-- Tiêu đề --}}
                         <div class="mb-3">
                             <label for="title" class="form-label fw-bold">Tiêu đề văn bản <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="title" name="title" 
-                                   value="{{ old('title', $doc->title) }}" required>
+                            <input type="text" class="form-control" id="title" name="title"
+                                value="{{ old('title', $doc->title) }}" required>
                             <div class="form-text text-muted">Đổi tiêu đề ở đây sẽ tự động đổi tên file trên Google Drive.</div>
+                        </div>
+
+                        {{-- Thêm vào form trong edit.blade.php --}}
+
+                        <div class="mb-3">
+                            <label for="category_id" class="form-label fw-bold">Danh mục văn bản <span class="text-danger">*</span></label>
+                            <select class="form-select" id="category_id" name="category_id" required>
+                                <option value="">-- Chọn danh mục --</option>
+
+                                @foreach($categories as $group)
+                                <optgroup label="{{ $group->name }}">
+                                    @foreach($group->children as $type)
+                                    <option value="{{ $type->id }}"
+                                        {{-- Logic để selected: Nếu đang sửa và ID trùng khớp --}}
+                                        {{ (old('category_id', $doc->category_id) == $type->id) ? 'selected' : '' }}>
+                                        {{ $type->name }}
+                                    </option>
+                                    @endforeach
+                                </optgroup>
+                                @endforeach
+                            </select>
                         </div>
 
                         {{-- Loại file --}}
@@ -42,18 +63,18 @@
                         {{-- File hiện tại --}}
                         <div class="mb-4">
                             <label class="form-label fw-bold">File đính kèm</label>
-                            
+
                             @if($doc->drive_path)
-                                <div class="alert alert-light border d-flex align-items-center mb-2">
-                                    <i class="fas fa-file-check text-success fa-2x me-3"></i>
-                                    <div>
-                                        <strong>File hiện tại trên hệ thống</strong><br>
-                                        <small class="text-muted">ID Drive: {{ $doc->drive_path }}</small>
-                                    </div>
-                                    <a href="https://drive.google.com/file/d/{{ $doc->drive_path }}/view" target="_blank" class="btn btn-sm btn-outline-primary ms-auto">
-                                        <i class="fas fa-external-link-alt me-1"></i>Xem file
-                                    </a>
+                            <div class="alert alert-light border d-flex align-items-center mb-2">
+                                <i class="fas fa-file-check text-success fa-2x me-3"></i>
+                                <div>
+                                    <strong>File hiện tại trên hệ thống</strong><br>
+                                    <small class="text-muted">ID Drive: {{ $doc->drive_path }}</small>
                                 </div>
+                                <a href="https://drive.google.com/file/d/{{ $doc->drive_path }}/view" target="_blank" class="btn btn-sm btn-outline-primary ms-auto">
+                                    <i class="fas fa-external-link-alt me-1"></i>Xem file
+                                </a>
+                            </div>
                             @endif
 
                             <label class="form-label small text-muted mt-2">Chọn file mới nếu muốn thay thế (Bỏ trống để giữ nguyên file cũ)</label>

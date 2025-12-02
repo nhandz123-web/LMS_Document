@@ -9,10 +9,15 @@ class Document extends Model
 {
     protected $fillable = [
         'title','type','author_id','published_at',
-        'original_name','drive_path','mime','size'
+        'original_name','drive_path','mime','size',
+        'category_id'
     ];
 
     public function author() {
         return $this->belongsTo(User::class, 'author_id');
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }
