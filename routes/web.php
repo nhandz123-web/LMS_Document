@@ -71,6 +71,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('/users', [App\Http\Controllers\Admin\UserManagementController::class, 'index'])->name('users.index');
     Route::post('/users/{id}/role', [App\Http\Controllers\Admin\UserManagementController::class, 'updateRole'])->name('users.role');
     Route::post('/users/{id}/status', [App\Http\Controllers\Admin\UserManagementController::class, 'toggleStatus'])->name('users.status');
+    Route::get('/users/{id}/edit', [App\Http\Controllers\Admin\UserManagementController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{id}', [App\Http\Controllers\Admin\UserManagementController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [App\Http\Controllers\Admin\UserManagementController::class, 'destroy'])->name('users.destroy');
 });
 
