@@ -179,4 +179,48 @@ class DocumentManagementController extends Controller
             return back()->withErrors(['file' => 'Lỗi: ' . $e->getMessage()])->withInput();
         }
     }
+
+    // App/Http/Controllers/Admin/DocumentManagementController.php
+
+    public function syncFromDrive(GoogleDriveService $drive)
+    {
+        try {
+            // 1. Lấy tất cả file từ Drive
+            $driveFiles = $drive->listFiles();
+            $count = 0;
+
+            foreach ($driveFiles as $file) {
+                // 2. Kiểm tra xem File ID này đã có trong Database chưa
+                $exists = Document::where('drive_path', $file->id)->exists();
+
+                if (!$exists) {
+                    // 3. Nếu chưa có -> Tạo mới
+                    Document::create([
+                        'title' => $file->name, // Lấy tên file làm tiêu đề
+                        'drive_path' => $file->id,
+                        'type' => $this->guessType($file->mimeType), // Hàm đoán loại file (viết thêm bên dưới)
+                        'user_id' => auth()->id(), // Gán tạm cho Admin đang thao tác
+                        'author_id' => auth()->id(),
+                        'status' => 'approved',
+                        'category_id' => null, // Để trống, sau này vào sửa sau
+                        'created_at' => date('Y-m-d H:i:s', strtotime($file->createdTime)) // Lấy ngày tạo trên Drive
+                    ]);
+                    $count++;
+                }
+            }
+
+            return back()->with('success', "Đã đồng bộ thành công! Tìm thấy {$count} văn bản mới từ Drive.");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Lỗi đồng bộ: ' . $e->getMessage());
+        }
+    }
+
+    // Hàm phụ để đoán loại file từ mimeType của Google
+    private function guessType($mimeType)
+    {
+        if (str_contains($mimeType, 'pdf')) return 'PDF';
+        if (str_contains($mimeType, 'word') || str_contains($mimeType, 'document')) return 'DOCX';
+        if (str_contains($mimeType, 'presentation') || str_contains($mimeType, 'powerpoint')) return 'SLIDE';
+        return 'OTHER';
+    }
 }

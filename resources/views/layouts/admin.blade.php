@@ -41,7 +41,7 @@
 <body>
 
     <div class="d-flex">
-        <div class="sidebar p-3 d-none d-md-block" style="width: 250px;">
+        <div class="sidebar p-3 d-none d-md-block flex-shrink-0" style="width: 250px;">
             <h4 class="text-white text-center mb-4">HỆ THỐNG VB</h4>
             <hr>
             <ul class="list-unstyled">

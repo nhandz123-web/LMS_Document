@@ -5,10 +5,22 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold text-primary"><i class="fas fa-folder-open me-2"></i>Quản lý văn bản</h3>
-        <a href="{{ route('admin.documents.create') }}" class="btn btn-primary shadow-sm">
-            <i class="fas fa-plus-circle me-2"></i>Thêm văn bản mới
-        </a>
+        <h3 class="fw-bold text-primary">...</h3>
+
+        <div>
+            {{-- Nút Đồng bộ --}}
+            <form action="{{ route('admin.documents.sync') }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-warning text-dark shadow-sm me-2" onclick="return confirm('Quá trình này có thể mất vài giây. Bạn có chắc muốn quét Google Drive không?')">
+                    <i class="fas fa-sync-alt me-2"></i>Đồng bộ từ Drive
+                </button>
+            </form>
+
+            {{-- Nút Thêm mới cũ --}}
+            <a href="{{ route('admin.documents.create') }}" class="btn btn-primary shadow-sm">
+                <i class="fas fa-plus-circle me-2"></i>Thêm văn bản mới
+            </a>
+        </div>
     </div>
 
     @if(session('success'))

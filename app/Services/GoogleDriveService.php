@@ -83,4 +83,18 @@ class GoogleDriveService
         $response = $this->service()->files->get($fileId, ['alt' => 'media']);
         return $response->getBody()->getContents();
     }
+    public function listFiles()
+    {
+        $folderId = env('GOOGLE_DRIVE_FOLDER_ID');
+
+        // Query: Lấy file nằm trong folder cha, và không phải là thùng rác (trashed = false)
+        $query = "'{$folderId}' in parents and trashed = false";
+
+        $files = $this->service()->files->listFiles([
+            'q' => $query,
+            'fields' => 'files(id, name, mimeType, webViewLink, createdTime)' // Lấy các trường cần thiết
+        ]);
+
+        return $files->getFiles();
+    }
 }

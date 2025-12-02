@@ -70,6 +70,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::put('/documents/{id}', [App\Http\Controllers\Admin\DocumentManagementController::class, 'update'])->name('documents.update');
     Route::get('/documents/{id}/edit', [App\Http\Controllers\Admin\DocumentManagementController::class, 'edit'])->name('documents.edit');
     Route::delete('/documents/{id}', [App\Http\Controllers\Admin\DocumentManagementController::class, 'destroy'])->name('documents.destroy');
+    Route::post('/documents/sync', [App\Http\Controllers\Admin\DocumentManagementController::class, 'syncFromDrive'])->name('documents.sync');
 
     // Route Quản lý User (Giữ nguyên)
     Route::get('/users', [App\Http\Controllers\Admin\UserManagementController::class, 'index'])->name('users.index');
