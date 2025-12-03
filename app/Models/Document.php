@@ -10,7 +10,8 @@ class Document extends Model
     protected $fillable = [
         'title','type','author_id','published_at',
         'original_name','drive_path','mime','size',
-        'category_id'
+        'category_id',
+        'privacy'
     ];
 
     public function author() {

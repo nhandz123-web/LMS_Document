@@ -9,7 +9,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'parent_id'];
+    protected $fillable = ['name', 'slug', 'parent_id','is_internal'];
 
     // 1. Quan hệ: Một danh mục con thuộc về một danh mục cha
     public function parent()

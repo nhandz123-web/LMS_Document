@@ -16,22 +16,31 @@ class UserManagementController extends Controller
     }
 
     // Thay đổi vai trò (Thăng chức / Giáng chức)
-    public function updateRole($id)
+    public function updateRole(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
-        // So sánh chính xác với giá trị trong DB: 'ADMIN'
-        if ($user->role == 'ADMIN') {
-            // Giáng cấp xuống SV
-            $user->update(['role' => 'SV']);
-            $msg = "Đã giáng cấp [{$user->fullname}] xuống thành Sinh viên (SV).";
-        } else {
-            // Thăng cấp lên ADMIN
-            $user->update(['role' => 'ADMIN']);
-            $msg = "Đã thăng cấp [{$user->fullname}] lên Admin.";
+        // [QUAN TRỌNG] Không cho phép tự hạ cấp chính mình
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Bạn không thể thay đổi quyền của chính mình!');
         }
 
-        return back()->with('success', $msg);
+        // Validate: Chỉ chấp nhận 3 quyền này
+        $request->validate([
+            'role' => 'required|in:ADMIN,GV,SV'
+        ]);
+
+        // Cập nhật
+        $user->update(['role' => $request->role]);
+
+        // Tạo thông báo hiển thị cho đẹp
+        $roleName = match ($request->role) {
+            'ADMIN' => 'Quản trị viên',
+            'GV'    => 'Giảng viên',
+            'SV'    => 'Sinh viên',
+        };
+
+        return back()->with('success', "Đã cập nhật vai trò của [{$user->fullname}] thành: {$roleName}");
     }
 
     // Khóa / Mở khóa tài khoản

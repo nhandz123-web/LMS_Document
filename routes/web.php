@@ -87,4 +87,8 @@ Route::middleware('auth')->group(function () {
     // Dùng resource để có đủ tên route, bao gồm documents.destroy
     Route::resource('documents', DocumentController::class)
         ->only(['index', 'create', 'store', 'destroy']);
+    // Route trang chủ (Ai cũng xem được)
 });
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/document/{id}', [App\Http\Controllers\HomeController::class, 'show'])->name('document.show');

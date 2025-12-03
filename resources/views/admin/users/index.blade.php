@@ -104,7 +104,9 @@
                         <li><a class="dropdown-item" href="#"><i class="fas fa-users me-2"></i>Tất cả</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user-shield me-2"></i>Chỉ Admin</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Chỉ Sinh viên</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2 text-success"></i>Đang hoạt động</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-lock me-2 text-danger"></i>Đã khóa</a></li>
                     </ul>
@@ -157,12 +159,21 @@
                             {{-- Role Column --}}
                             <td>
                                 @if($user->role == 'ADMIN')
-                                <span class="badge rounded-pill px-3 py-2" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; font-weight: 600;">
-                                    <i class="fas fa-crown me-1"></i>ADMIN
+                                {{-- 1. ADMIN: Màu Hồng Cam --}}
+                                <span class="badge rounded-pill px-3 py-2" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; font-weight: 600; box-shadow: 0 2px 5px rgba(250, 112, 154, 0.4);">
+                                    <i class="fas fa-crown me-1"></i>QUẢN TRỊ
                                 </span>
+
+                                @elseif($user->role == 'GV')
+                                {{-- 2. GIẢNG VIÊN: Màu Tím (Sang trọng) --}}
+                                <span class="badge rounded-pill px-3 py-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 600; box-shadow: 0 2px 5px rgba(118, 75, 162, 0.4);">
+                                    <i class="fas fa-chalkboard-teacher me-1"></i>GIẢNG VIÊN
+                                </span>
+
                                 @else
-                                <span class="badge rounded-pill px-3 py-2" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; font-weight: 600;">
-                                    <i class="fas fa-graduation-cap me-1"></i>SINH VIÊN
+                                {{-- 3. SINH VIÊN: Màu Xanh Dương --}}
+                                <span class="badge rounded-pill px-3 py-2" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; font-weight: 600; box-shadow: 0 2px 5px rgba(0, 242, 254, 0.4);">
+                                    <i class="fas fa-user-graduate me-1"></i>SINH VIÊN
                                 </span>
                                 @endif
                             </td>
@@ -198,42 +209,65 @@
                                         <i class="fas fa-cog me-1"></i>Tùy chọn
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                                        {{-- Change Role --}}
+
+                                        {{-- 1. PHẦN PHÂN QUYỀN (Đã cập nhật cho 3 vai trò) --}}
                                         <li class="dropdown-header text-uppercase small fw-bold text-muted">
-                                            <i class="fas fa-user-tag me-2"></i>Quản lý quyền
+                                            <i class="fas fa-user-tag me-2"></i>Chọn vai trò
                                         </li>
+
+                                        {{-- Nút set QUẢN TRỊ VIÊN --}}
                                         <li>
                                             <form action="{{ route('admin.users.role', $user->id) }}" method="POST">
-                                                @csrf
-                                                @if($user->role == 'ADMIN')
-                                                <button class="dropdown-item text-danger" type="submit"
-                                                    onclick="return confirm('⚠️ Giáng cấp Admin này xuống làm Sinh viên?')">
-                                                    <i class="fas fa-arrow-down me-2"></i>Hạ xuống Sinh viên
+                                                @csrf <input type="hidden" name="role" value="ADMIN">
+                                                <button class="dropdown-item d-flex justify-content-between align-items-center {{ $user->role == 'ADMIN' ? 'active' : '' }}" type="submit">
+                                                    <span><i class="fas fa-user-shield me-2 text-danger"></i>Quản trị viên</span>
+                                                    @if($user->role == 'ADMIN') <i class="fas fa-check"></i> @endif
                                                 </button>
-                                                @else
-                                                <button class="dropdown-item text-primary" type="submit"
-                                                    onclick="return confirm('🔐 Thăng cấp người này lên Admin?')">
-                                                    <i class="fas fa-arrow-up me-2"></i>Thăng lên Admin
-                                                </button>
-                                                @endif
                                             </form>
                                         </li>
 
-                                        <li><hr class="dropdown-divider"></li>
-
-                                        {{-- Edit & Delete --}}
-                                        <li class="dropdown-header text-uppercase small fw-bold text-muted">
-                                            <i class="fas fa-edit me-2"></i>Chỉnh sửa
+                                        {{-- Nút set GIẢNG VIÊN --}}
+                                        <li>
+                                            <form action="{{ route('admin.users.role', $user->id) }}" method="POST">
+                                                @csrf <input type="hidden" name="role" value="GV">
+                                                <button class="dropdown-item d-flex justify-content-between align-items-center {{ $user->role == 'GV' ? 'active' : '' }}" type="submit">
+                                                    <span><i class="fas fa-chalkboard-teacher me-2 text-primary"></i>Giảng viên</span>
+                                                    @if($user->role == 'GV') <i class="fas fa-check"></i> @endif
+                                                </button>
+                                            </form>
                                         </li>
+
+                                        {{-- Nút set SINH VIÊN --}}
+                                        <li>
+                                            <form action="{{ route('admin.users.role', $user->id) }}" method="POST">
+                                                @csrf <input type="hidden" name="role" value="SV">
+                                                <button class="dropdown-item d-flex justify-content-between align-items-center {{ $user->role == 'SV' ? 'active' : '' }}" type="submit">
+                                                    <span><i class="fas fa-user-graduate me-2 text-success"></i>Sinh viên</span>
+                                                    @if($user->role == 'SV') <i class="fas fa-check"></i> @endif
+                                                </button>
+                                            </form>
+                                        </li>
+
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+
+                                        {{-- 2. PHẦN CHỈNH SỬA & XÓA --}}
+                                        <li class="dropdown-header text-uppercase small fw-bold text-muted">
+                                            <i class="fas fa-cog me-2"></i>Thao tác
+                                        </li>
+
+                                        {{-- Sửa thông tin --}}
                                         <li>
                                             <a href="{{ route('admin.users.edit', $user->id) }}" class="dropdown-item">
                                                 <i class="fas fa-user-edit me-2 text-info"></i>Chỉnh sửa thông tin
                                             </a>
                                         </li>
+
+                                        {{-- Xóa User --}}
                                         <li>
                                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
+                                                @csrf @method('DELETE')
                                                 <button class="dropdown-item text-danger" type="submit"
                                                     onclick="return confirm('⚠️ CẢNH BÁO:\n\nHành động này sẽ xóa vĩnh viễn user khỏi hệ thống.\nTất cả dữ liệu liên quan sẽ bị mất.\n\nBạn có chắc chắn?')">
                                                     <i class="fas fa-trash-alt me-2"></i>Xóa vĩnh viễn
@@ -241,11 +275,13 @@
                                             </form>
                                         </li>
 
-                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
 
-                                        {{-- Lock/Unlock Account --}}
+                                        {{-- 3. PHẦN BẢO MẬT (KHÓA/MỞ KHÓA) --}}
                                         <li class="dropdown-header text-uppercase small fw-bold text-muted">
-                                            <i class="fas fa-shield-alt me-2"></i>Bảo mật
+                                            <i class="fas fa-shield-alt me-2"></i>Trạng thái
                                         </li>
                                         <li>
                                             <form action="{{ route('admin.users.status', $user->id) }}" method="POST">
@@ -293,7 +329,7 @@
     .hover-lift {
         transition: all 0.3s ease;
     }
-    
+
     .hover-lift:hover {
         transform: translateY(-5px);
         box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
@@ -305,7 +341,7 @@
 
     .user-row:hover {
         background-color: #f8f9fc;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     .avatar-circle {
@@ -379,7 +415,7 @@
     /* Custom badge hover effects */
     .badge.rounded-pill:hover {
         transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 </style>
 
@@ -388,7 +424,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize all dropdowns
         var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
-        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+        var dropdownList = dropdownElementList.map(function(dropdownToggleEl) {
             return new bootstrap.Dropdown(dropdownToggleEl);
         });
     });
