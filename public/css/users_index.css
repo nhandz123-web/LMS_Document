@@ -1,0 +1,92 @@
+
+    .hover-lift {
+        transition: all 0.3s ease;
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .user-row {
+        transition: all 0.3s ease;
+    }
+
+    .user-row:hover {
+        background-color: #f8f9fc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .avatar-circle {
+        transition: transform 0.2s ease;
+    }
+
+    .user-row:hover .avatar-circle {
+        transform: scale(1.1);
+    }
+
+    .badge {
+        transition: all 0.2s ease;
+        font-size: 0.8rem;
+    }
+
+    .bg-success-soft {
+        background-color: #d4edda !important;
+    }
+
+    .bg-danger-soft {
+        background-color: #f8d7da !important;
+    }
+
+    .dropdown-menu {
+        border-radius: 10px;
+        padding: 0.5rem 0;
+        min-width: 220px;
+    }
+
+    .dropdown-item {
+        padding: 0.6rem 1.2rem;
+        transition: all 0.2s ease;
+        border-radius: 5px;
+        margin: 0 0.3rem;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f8f9fc;
+        transform: translateX(5px);
+    }
+
+    .dropdown-header {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.7rem;
+    }
+
+    .dropdown-divider {
+        margin: 0.5rem 0;
+    }
+
+    .icon-box {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .table thead th {
+        border: none;
+        padding: 15px;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table tbody td {
+        padding: 15px;
+        vertical-align: middle;
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    /* Custom badge hover effects */
+    .badge.rounded-pill:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }

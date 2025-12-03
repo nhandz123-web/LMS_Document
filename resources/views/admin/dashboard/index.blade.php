@@ -3,6 +3,9 @@
 @section('title', 'Bảng điều khiển')
 
 @section('content')
+<head>
+    <link rel="stylesheet" href="{{asset('css/dashboard_index.css')}}">
+</head>
 <div class="container-fluid px-4">
     {{-- Header Section --}}
     <div class="row mb-4 align-items-center">
@@ -196,59 +199,12 @@
 </div>
 
 {{-- Custom CSS --}}
-<style>
-    .hover-lift {
-        transition: all 0.3s ease;
-    }
-    
-    .hover-lift:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
-    }
 
-    .document-item:hover {
-        background-color: #f8f9fc;
-        cursor: pointer;
-    }
-
-    .document-item:last-child {
-        border-bottom: none !important;
-    }
-
-    .card {
-        transition: all 0.3s ease;
-    }
-
-    .icon-box {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .progress-bar {
-        transition: width 1s ease;
-    }
-
-    /* Custom scrollbar */
-    .card-body::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .card-body::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-
-    .card-body::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 3px;
-    }
-
-    .card-body::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-</style>
 
 {{-- Chart Script --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    
     const chartData = @json($chartData); 
     const ctx = document.getElementById('myAreaChart').getContext('2d');
     
@@ -324,5 +280,6 @@
             }
         }
     });
+
 </script>
 @endsection

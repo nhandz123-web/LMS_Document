@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 @section('content')
 <h1 class="text-2xl">Xin chào, {{ $user->fullname }} ({{ $role }})</h1>
 <ul style="margin-top:12px">
@@ -10,4 +10,5 @@
     <a href="{{ route('admin.dashboard') }}">Vào trang quản trị</a><li>• Phân quyền</li>
   @endif
 </ul>
-@endsection
+@endsection --}}
+

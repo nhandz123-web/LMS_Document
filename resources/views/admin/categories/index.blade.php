@@ -3,6 +3,9 @@
 @section('title', 'Quản lý Danh mục')
 
 @section('content')
+<head>
+    <link rel="stylesheet" href="{{asset('css/categori.css')}}">
+</head>
 <div class="container-fluid px-4">
     {{-- Header Section --}}
     <div class="row mb-4 align-items-center">
@@ -391,138 +394,5 @@
     </div>
 </div>
 
-{{-- Custom CSS --}}
-<style>
-    .hover-lift {
-        transition: all 0.3s ease;
-    }
-    
-    .hover-lift:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .parent-row {
-        border-left: 4px solid #667eea;
-    }
-
-    .child-row {
-        transition: all 0.3s ease;
-    }
-
-    .child-row:hover {
-        background-color: #f8f9fc;
-    }
-
-    .category-icon {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        transition: transform 0.2s ease;
-    }
-
-    .parent-row:hover .category-icon,
-    .child-row:hover .category-icon {
-        transform: scale(1.1);
-    }
-
-    .toggle-btn {
-        border: none;
-        padding: 5px 10px;
-        transition: all 0.3s ease;
-    }
-
-    .toggle-btn:hover {
-        background: #e5e7eb;
-    }
-
-    .transition-icon {
-        transition: transform 0.3s ease;
-    }
-
-    .rotated {
-        transform: rotate(-90deg);
-    }
-
-    .icon-box {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .empty-state i {
-        animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-
-    .table thead th {
-        border: none;
-        padding: 15px;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-    }
-
-    .table tbody td {
-        padding: 15px;
-        vertical-align: middle;
-    }
-
-    code {
-        background: #f3f4f6;
-        padding: 3px 8px;
-        border-radius: 4px;
-        font-size: 0.85rem;
-    }
-</style>
-
-{{-- JavaScript --}}
-<script>
-    // Toggle children visibility
-    function toggleChildren(parentId) {
-        const children = document.querySelectorAll('.child-of-' + parentId);
-        const icon = document.getElementById('icon-' + parentId);
-        
-        children.forEach(child => {
-            if (child.style.display === 'none') {
-                child.style.display = 'table-row';
-                icon.classList.remove('rotated');
-            } else {
-                child.style.display = 'none';
-                icon.classList.add('rotated');
-            }
-        });
-    }
-
-    // Expand all children
-    function expandAll() {
-        document.querySelectorAll('.child-row').forEach(row => {
-            row.style.display = 'table-row';
-        });
-        document.querySelectorAll('.transition-icon').forEach(icon => {
-            icon.classList.remove('rotated');
-        });
-    }
-
-    // Collapse all children
-    function collapseAll() {
-        document.querySelectorAll('.child-row').forEach(row => {
-            row.style.display = 'none';
-        });
-        document.querySelectorAll('.transition-icon').forEach(icon => {
-            icon.classList.add('rotated');
-        });
-    }
-
-    // Open edit modal with data
-    function openEditModal(id, name, isInternal) {
-        document.getElementById('editForm').action = '/admin/categories/' + id;
-        document.getElementById('editName').value = name;
-        document.getElementById('editIsInternal').checked = (isInternal == 1);
-    }
-
-    // Initialize: Show all children by default
-    document.addEventListener('DOMContentLoaded', function() {
-        expandAll();
-    });
-</script>
+<script src="{{ asset('js/categori.js')}}"></script>
 @endsection

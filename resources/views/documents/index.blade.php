@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('title', 'Danh sách tài liệu')
 
@@ -54,4 +54,4 @@
   <div class="mt-4">
       {{ $docs->links() }}
   </div>
-@endsection
+@endsection --}}

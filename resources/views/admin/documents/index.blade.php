@@ -3,6 +3,9 @@
 @section('title', 'Quản lý văn bản')
 
 @section('content')
+<head>
+    <link rel="stylesheet" href="{{asset('css/documents_index.css')}}">
+</head>
 <div class="container-fluid px-4">
     {{-- Header Section --}}
     <div class="row mb-4 align-items-center">
@@ -321,91 +324,8 @@
     </div>
 </div>
 
-{{-- Custom CSS --}}
-<style>
-    .document-row {
-        transition: all 0.3s ease;
-    }
 
-    .document-row:hover {
-        background-color: #f8f9fc;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .btn-group .btn {
-        transition: all 0.2s ease;
-    }
-
-    .btn-group .btn:hover {
-        transform: translateY(-2px);
-    }
-
-    .file-icon {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        transition: transform 0.2s ease;
-    }
-
-    .document-row:hover .file-icon {
-        transform: scale(1.1);
-    }
-
-    .avatar-circle {
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .badge {
-        transition: all 0.2s ease;
-    }
-
-    .badge:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-
-    .empty-state i {
-        animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-
-    .card {
-        transition: all 0.3s ease;
-    }
-
-    .table thead th {
-        border: none;
-        padding: 15px;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-    }
-
-    .table tbody td {
-        padding: 15px;
-        vertical-align: middle;
-    }
-
-    .form-control:focus, .form-select:focus {
-        border-color: #4e73df;
-        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-    }
-</style>
 
 {{-- Scripts --}}
-<script>
-    function setRejectId(id) {
-        let form = document.getElementById('rejectForm');
-        form.action = '/admin/documents/' + id + '/reject';
-    }
-
-    // Initialize tooltips
-    document.addEventListener('DOMContentLoaded', function() {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-    });
-</script>
+<script src="{{ asset('js/documents_index.js')}}"></script>
 @endsection
