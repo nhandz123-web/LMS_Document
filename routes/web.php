@@ -92,3 +92,4 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/document/{id}', [App\Http\Controllers\HomeController::class, 'show'])->name('document.show');
+Route::get('/danh-muc/{id}', [App\Http\Controllers\HomeController::class, 'category'])->name('category.show');

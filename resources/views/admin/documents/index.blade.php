@@ -67,7 +67,7 @@
                         <label class="form-label text-muted small fw-semibold mb-2">
                             <i class="fas fa-folder me-1"></i>Danh mục
                         </label>
-                        <select name="category_id" class="form-select" onchange="this.form.submit()">
+                        <select name="category_id" class="form-select">
                             <option value="">-- Tất cả danh mục --</option>
                             @foreach($categories as $group)
                             <optgroup label="{{ $group->name }}">
@@ -267,13 +267,61 @@
 
         {{-- Pagination --}}
         @if($docs->hasPages())
-        <div class="card-footer bg-white border-top">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="text-muted small">
-                    Hiển thị {{ $docs->firstItem() }} - {{ $docs->lastItem() }} trong tổng số {{ $docs->total() }} văn bản
+        <div class="card-footer bg-white border-top py-3">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="text-muted small">
+                        Hiển thị <strong>{{ $docs->firstItem() }}</strong> - <strong>{{ $docs->lastItem() }}</strong> 
+                        trong tổng số <strong>{{ $docs->total() }}</strong> văn bản
+                    </div>
                 </div>
-                <div>
-                    {{ $docs->links() }}
+                <div class="col-md-6">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm justify-content-md-end justify-content-center mb-0">
+                            {{-- Previous Button --}}
+                            @if ($docs->onFirstPage())
+                                <li class="page-item disabled">
+                                    <span class="page-link">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $docs->previousPageUrl() }}" rel="prev">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Page Numbers --}}
+                            @foreach ($docs->getUrlRange(1, $docs->lastPage()) as $page => $url)
+                                @if ($page == $docs->currentPage())
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ $page }}</span>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
+
+                            {{-- Next Button --}}
+                            @if ($docs->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $docs->nextPageUrl() }}" rel="next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -390,6 +438,40 @@
     .form-control:focus, .form-select:focus {
         border-color: #4e73df;
         box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+
+    /* Custom Pagination Styles */
+    .pagination {
+        gap: 5px;
+    }
+
+    .page-link {
+        border-radius: 8px !important;
+        border: 1px solid #e5e7eb;
+        color: #4e73df;
+        padding: 8px 12px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .page-link:hover {
+        background-color: #4e73df;
+        color: white;
+        border-color: #4e73df;
+        transform: translateY(-2px);
+    }
+
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+        color: white;
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .page-item.disabled .page-link {
+        background-color: #f3f4f6;
+        border-color: #e5e7eb;
+        color: #9ca3af;
     }
 </style>
 

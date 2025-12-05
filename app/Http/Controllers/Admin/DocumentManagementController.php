@@ -45,29 +45,46 @@ class DocumentManagementController extends Controller
 
     public function store(Request $request, GoogleDriveService $drive)
     {
+        // 1. Validate dữ liệu
         $request->validate([
             'title' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id', // <--- Validate Danh mục
+            'category_id' => 'required|exists:categories,id', // Validate Danh mục
             'type' => 'required',
-            'file' => 'required|file|max:20480',
+            'file' => 'required|file|max:20480', // Max 20MB
+            'privacy' => 'required|in:public,restricted', // [MỚI] Validate Quyền hạn
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // [MỚI] Validate Ảnh bìa
         ], [
             'category_id.required' => 'Vui lòng chọn danh mục văn bản.',
+            'privacy.required' => 'Vui lòng chọn phạm vi hiển thị.',
         ]);
 
         try {
+            // 2. Upload file tài liệu lên Google Drive
             $uploaded = $drive->upload($request->file('file'));
 
+            // 3. Khởi tạo đối tượng
             $doc = new Document();
             $doc->title = $request->title;
-            $doc->category_id = $request->category_id; // <--- LƯU DANH MỤC
+            $doc->category_id = $request->category_id; // Lưu Danh mục
             $doc->type = $request->type;
+            $doc->privacy = $request->privacy; // Lưu Quyền hạn
+
             $doc->user_id = auth()->id();
             $doc->author_id = auth()->id();
             $doc->drive_path = $uploaded->id;
             $doc->status = 'approved';
+
+            // 4. [MỚI] Xử lý upload Ảnh bìa (nếu có)
+            if ($request->hasFile('cover_image')) {
+                // Lưu vào public/storage/covers
+                $path = $request->file('cover_image')->store('covers', 'public');
+                $doc->cover_image = $path;
+            }
+
             $doc->save();
 
-            return redirect()->route('admin.documents.index')->with('success', 'Đã tải lên thành công!');
+            return redirect()->route('admin.documents.index')
+                ->with('success', 'Đã tải lên văn bản thành công!');
         } catch (\Exception $e) {
             return back()->withErrors(['file' => 'Lỗi: ' . $e->getMessage()])->withInput();
         }
@@ -146,35 +163,53 @@ class DocumentManagementController extends Controller
     {
         $doc = Document::findOrFail($id);
 
-        // 1. Validate (Giữ nguyên)
+        // 1. Validate
         $request->validate([
             'title' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id', // Kiểm tra danh mục tồn tại
+            'category_id' => 'required|exists:categories,id',
             'type' => 'required',
-            'file' => 'nullable|file|max:20480',
+            'privacy' => 'required|in:public,restricted', // [MỚI]
+            'file' => 'nullable|file|max:20480', // File tài liệu (không bắt buộc)
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // [MỚI]
         ]);
 
         try {
-            // ... (Đoạn xử lý đổi tên file và upload file mới giữ nguyên) ...
+            // 2. Xử lý Google Drive
+            // A. Đổi tên file trên Drive nếu tiêu đề thay đổi
             if ($doc->title !== $request->title && $doc->drive_path) {
                 $drive->rename($doc->drive_path, $request->title);
             }
 
+            // B. Thay thế file tài liệu (nếu người dùng upload file mới)
             if ($request->hasFile('file')) {
-                // ... logic upload file ...
+                // Xóa file cũ trên Drive
+                if ($doc->drive_path) {
+                    $drive->delete($doc->drive_path);
+                }
+                // Upload file mới
+                $uploaded = $drive->upload($request->file('file'));
+                $doc->drive_path = $uploaded->id;
             }
 
-            // 2. CẬP NHẬT DATABASE
+            // 3. Cập nhật thông tin vào Database
             $doc->title = $request->title;
-
-            // ---> [QUAN TRỌNG] THÊM DÒNG NÀY ĐỂ LƯU DANH MỤC <---
-            $doc->category_id = $request->category_id;
-
+            $doc->category_id = $request->category_id; // Cập nhật danh mục
             $doc->type = $request->type;
+            $doc->privacy = $request->privacy; // Cập nhật quyền hạn
+
+            // 4. [MỚI] Cập nhật Ảnh bìa
+            if ($request->hasFile('cover_image')) {
+                // (Tùy chọn) Xóa ảnh cũ để tiết kiệm dung lượng server
+                // if ($doc->cover_image) Storage::disk('public')->delete($doc->cover_image);
+
+                $path = $request->file('cover_image')->store('covers', 'public');
+                $doc->cover_image = $path;
+            }
+
             $doc->save();
 
             return redirect()->route('admin.documents.index')
-                ->with('success', 'Cập nhật văn bản và danh mục thành công!');
+                ->with('success', 'Cập nhật văn bản thành công!');
         } catch (\Exception $e) {
             return back()->withErrors(['file' => 'Lỗi: ' . $e->getMessage()])->withInput();
         }

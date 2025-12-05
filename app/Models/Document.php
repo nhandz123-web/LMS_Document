@@ -11,7 +11,8 @@ class Document extends Model
         'title','type','author_id','published_at',
         'original_name','drive_path','mime','size',
         'category_id',
-        'privacy'
+        'privacy',
+        'cover_image'
     ];
 
     public function author() {
