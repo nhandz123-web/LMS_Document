@@ -98,7 +98,6 @@ class UserManagementController extends Controller
         if ($request->filled('password')) {
             $data['password'] = bcrypt($request->password);
         }
-
         $user->update($data);
 
         return redirect()->route('admin.users.index')

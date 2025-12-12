@@ -8,6 +8,14 @@ use Google\Service\Drive\DriveFile;
 
 class GoogleDriveService
 {
+//   Kết nối tài khoản Google của bạn
+
+// Tạo access_token từ refresh_token
+
+// Lưu token hợp lệ vào client để gửi request lên Google Drive API
+
+// Mọi request đến Google Drive API sẽ fail
+
     private function client(): Client
     {
         $client = new Client();
@@ -27,10 +35,11 @@ class GoogleDriveService
 
         // Gắn token hợp lệ cho client
         $client->setAccessToken($token);
-
         return $client;
     }
 
+    //Tạo class Google Drive API chính thức
+    //upload,down....
     private function service(): Drive
     {
         return new Drive($this->client());

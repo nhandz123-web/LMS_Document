@@ -28,6 +28,5 @@ class GoogleDriveServiceProvider extends ServiceProvider
             return new FilesystemAdapter($filesystem, $adapter, $config);
         });
     }
-
     public function register() {}
 }

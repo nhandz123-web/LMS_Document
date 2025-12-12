@@ -35,13 +35,13 @@ class DocumentManagementController extends Controller
         return view('admin.documents.index', compact('docs', 'categories'));
     }
 
-    public function create()
-    {
-        // Lấy các danh mục Cha (parent_id = null) và kèm theo con của nó (children)
-        $categories = Category::whereNull('parent_id')->with('children')->get();
+    // public function create()
+    // {
+    //     // Lấy các danh mục Cha (parent_id = null) và kèm theo con của nó (children)
+    //     $categories = Category::whereNull('parent_id')->with('children')->get();
 
-        return view('admin.documents.create', compact('categories'));
-    }
+    //     return view('admin.documents.create', compact('categories'));
+    // }
 
     public function store(Request $request, GoogleDriveService $drive)
     {
